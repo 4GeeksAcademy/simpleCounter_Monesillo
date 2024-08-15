@@ -1,26 +1,44 @@
+import { useState, useEffect } from "react";
 import React from "react";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
 
 //create your first component
-const Home = () => {
-	return (
-		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
-	);
-};
+const Counter = () => {
+	const [counterDigits, setCounterDigits] = useState(Array(6).fill(0));
+  
+	useEffect(() => {
+	  const incrementCounter = (digits) => {
+		const updatedDigits = [...digits];
+		for (let i = updatedDigits.length - 1; i >= 0; i--) {
+		  if (updatedDigits[i] === 9) {
+			updatedDigits[i] = 0;
+		  } else {
+			updatedDigits[i]++;
+			break;
+		  }
+		}
+		return updatedDigits;
+	  };
 
-export default Home;
+	  const interval = setInterval(() => {
+		setCounterDigits(prevDigits => incrementCounter(prevDigits));
+	  }, 1000);
+  
+	  return () => clearInterval(interval);
+	}, []);
+  
+	return (
+	  <div className="counter">
+		<div className="cell">
+		  <span role="img" aria-label="clock">
+			<i className="fa-regular fa-clock"></i>
+		  </span>
+		</div>
+		{counterDigits.map((digit, index) => (
+		  <div key={index} className="cell">{digit}</div>
+		))}
+	  </div>
+	);
+  };
+  
+  export default Counter;
